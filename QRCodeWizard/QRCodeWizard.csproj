@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+        <UseWindowsForms>true</UseWindowsForms>
+        <RootNamespace>QRCodeWizard</RootNamespace>
+        <ApplicationIcon>Resources\logo_ev.ico</ApplicationIcon>
+        <PublishSingleFile>true</PublishSingleFile>
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile> <!-- .NET 6+ -->
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract> <!-- For WPF -->
+        <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="QRCoder.Core" Version="1.0.3" />
+      <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\logo_ev.bmp" />
+      <None Remove="Resources\logo_ev.ico" />
+      <Resource Include="Resources\logo_ev.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Resources\logo_ev.bmp">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Resources\logo_ev.ico">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+    </ItemGroup>
+
+</Project>
