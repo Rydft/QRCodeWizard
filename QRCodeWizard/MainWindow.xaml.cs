@@ -37,13 +37,27 @@ public partial class MainWindow : IDisposable
     {
         _ = _qrCodeService.GenerateQRCode(["preload"], System.Drawing.Color.Black, _logo.Value);
     }
-
+    
+    private void PreloadLogoForThreads(int threadCount)
+    {
+        var tasks = new Task[threadCount];
+        for (var i = 0; i < threadCount; i++)
+        {
+            tasks[i] = Task.Run(() =>
+            {
+                _ = _logo.Value;
+            });
+        }
+        Task.WaitAll(tasks);
+    }
+    
     public MainWindow()
     {
         InitializeComponent();
         _qrCodeService = new QRCodeService();
         PreJIT();
         ThreadPool.SetMinThreads(Environment.ProcessorCount * 3, Environment.ProcessorCount * 3);
+        PreloadLogoForThreads(Environment.ProcessorCount);
         _ = _qrCodeService;
         _ = _logo.Value;
         LoadLogo();
@@ -62,7 +76,10 @@ public partial class MainWindow : IDisposable
     private static Bitmap? GetSafeLogo()
     {
         _preloadedLogo ??= LoadLogo();
-        return _preloadedLogo?.Clone() as Bitmap;
+        lock (_preloadedLogo)
+        {
+            return _preloadedLogo.Clone() as Bitmap;
+        }
     }
     private static Bitmap? LoadLogo()
     {
